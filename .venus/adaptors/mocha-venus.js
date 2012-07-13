@@ -34,7 +34,6 @@ Adaptor.prototype.start = function() {
 
   mocha.run()
    .on('HTML_JSON end', function(test){
-      console.log(test);
       window.venus.done(test);
    });
 }

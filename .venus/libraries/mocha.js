@@ -1624,6 +1624,9 @@ function HTML_JSON(runner) {
     , total = runner.total
     , results = {};
 
+  results.suites = [];
+  var index = 0;
+
   runner.on('suite', function(suite){
     if (suite.root) return;
 
@@ -1631,22 +1634,26 @@ function HTML_JSON(runner) {
     
     //console.log('url: ' + url);
     //console.log('suite.title: ' + suite.title);
-
-    results.title = suite.title;
-    results.url = url;
-    results.test = [];
+    results.suites.push({
+      'title' : suite.title,
+      'url' : url
+    });
+    results.suites[index].test = [];
   });
 
   runner.on('suite end', function(suite){
     if (suite.root) return;
+    index = index + 1;
 
-    console.log(results);
-    runner.emit('HTML_JSON end', results);
-    //console.log('the end!');
+    //console.log('suite end!');
   });
 
   runner.on('fail', function(test, err){
     if ('hook' == test.type || err.uncaught) runner.emit('test end', test);
+  });
+
+  runner.on('end', function() {
+    runner.emit('HTML_JSON end', results);
   });
 
   runner.on('test end', function(test){
@@ -1661,30 +1668,28 @@ function HTML_JSON(runner) {
     var ms = new Date - stats.start;
     //console.log('   ' + 'milliseconds: ' + (ms / 1000).toFixed(2));
 
+    results.failures = stats.failures;
+    results.passes = stats.passes;
+    results.milliseconds = (ms / 1000).toFixed(2);
+    results.suites[index]['percent'] = percent;
+
     // test
     if ('passed' == test.state) {
       //console.log('   ' + 'test.speed: ' + test.speed);
       //console.log('   ' + 'test.title: ' + test.title);
       //console.log('   ' + 'test.duration: ' + test.duration);
 
-      results.test.push({
+      results.suites[index].test.push({
+        'status' : 'passed',
         'title' : test.title,
-        'speed' : test.speed,
-        'duration' : test.duration,
-        'milliseconds' : (ms / 1000).toFixed(2),
-        'passes' : stats.passes,
-        'failures' : stats.failures,
-        'percent' : percent
+        'speed' : test.speed
       });
     } else if (test.pending) {
       //console.log('   ' + 'test.title: ' + test.title);
 
-      results.test.push({
-        'title' : test.title,
-        'milliseconds' : (ms / 1000).toFixed(2),
-        'passes' : stats.passes,
-        'failures' : stats.failures,
-        'percent' : percent
+      results.suites[index].test.push({
+        'status' : 'pending',
+        'title' : test.title
       });
     } else {
       var str = test.err.stack || test.err.toString();
@@ -1692,13 +1697,10 @@ function HTML_JSON(runner) {
       //console.log('   ' + 'test.title ' + test.title);
       //console.log('   ' + 'str' + str);
 
-      results.test.push({
+      results.suites[index].test.push({
+        'status' : 'failed',
         'title' : test.title,
-        'str' : str,
-        'milliseconds' : (ms / 1000).toFixed(2),
-        'passes' : stats.passes,
-        'failures' : stats.failures,
-        'percent' : percent
+        'str' : str
       });
     }
   });
