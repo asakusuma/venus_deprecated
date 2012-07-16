@@ -21,16 +21,7 @@
 </head>
 <body>
   <div class="header">venus ♀</div>
-  <div class="dashboard">
-    <div class="header2">first test</div>
-    <div class="test">should work</div>
-    <p>
-      time: results.<br />
-      speed: fast<br />
-      passes: 1<br />
-      failures: 0<br />
-      percent: 100%
-    <p>
+  <div id="dashboard" class="dashboard">
     <!--Running test: {testId}-->
   </div>
 

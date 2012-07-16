@@ -1653,13 +1653,18 @@ function HTML_JSON(runner) {
   });
 
   runner.on('end', function() {
+    var passes = results.passes;
+    var failures = results.failures;
+
+    var percent = (passes / (passes + failures)) * 100;
+    results.percent = percent;
+
     runner.emit('HTML_JSON end', results);
   });
 
   runner.on('test end', function(test){
     //console.log(test);
 
-    var percent = stats.tests / total * 100 | 0;
     //console.log('   ' + 'percent: ' + percent);
 
     //console.log('   ' + 'stats.passes: ' + stats.passes);
@@ -1671,7 +1676,6 @@ function HTML_JSON(runner) {
     results.failures = stats.failures;
     results.passes = stats.passes;
     results.milliseconds = (ms / 1000).toFixed(2);
-    results.suites[index]['percent'] = percent;
 
     // test
     if ('passed' == test.state) {

@@ -128,8 +128,34 @@ p {
   padding-left: 30px;
 }
 
+.space {
+  padding-top: 10px;
+}
 
+.red {
+  color: #F90101;
+}
 
+.green {
+  color: #5F9F27;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color:#5F9F27;
+}
+a:visited {
+  color:#5F9F27;
+}
+a:hover {
+  color:#D34D2B;
+}
+a:active {
+  color:#8E392B;
+}
 
 
 

@@ -17,10 +17,13 @@ describe('first test', function() {
   it('should not work', function() {
   	'1'.should.eql('2');
   });
+  it('this test should fail', function() {
+    '1'.should.eql('2');
+  });
 });
 
 describe('second test', function() {
-  it('definately work', function() {
+  it('definitely work', function() {
     '3'.should.eql('3');
   });
 });
