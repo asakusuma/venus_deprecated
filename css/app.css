@@ -15,12 +15,13 @@ body {
 	-moz-box-shadow: 2px 0 3px #0d0d0d, -2px 0 3px #0d0d0d, 0 3px 3px #0d0d0d, 0 -2px 3px #0d0d0d;
 	-webkit-box-shadow: 2px 0 3px #0D0D0D, -2px 0 3px #0D0D0D, 0 3px 3px #0D0D0D, 0 -2px 3px #0D0D0D;
 	width: 500px;
-	height: 470px;
+	min-height: 470px;
 	color: #3D95D4;
 	background: #181A1A;
 	margin: 10px auto;
 	text-align: center;
 	position: relative;
+  padding-bottom: 10px;
 }
 
 .status_section {

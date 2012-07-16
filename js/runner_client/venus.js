@@ -21,16 +21,19 @@
   	$.each(results.suites, function(index, suite) {
   		dashboard.append('<div class="test">' + suite.title + ' - ' + 
   										 '<a class="link" href="' + suite.url + '">rerun</a>' + '</div>');
-  		$.each(suite.test, function(index, test) {
-  			var test;
+      if(suite.test)
+      {
+    		$.each(suite.test, function(index, test) {
+    			var test;
 
-  			if(test.status == 'passed') {
-  				test = '<p>' + test.title + ' ' + '<span class="green">✔</span>' + '</p>';
-  			} else {
-  				test = '<p class="red">' + test.title + ' ✖' + '</p>';
-  			}
-  			dashboard.append(test);
-  		});
+    			if(test.status == 'passed') {
+    				test = '<p>' + test.title + ' ' + '<span class="green">✔</span>' + '</p>';
+    			} else {
+    				test = '<p class="red">' + test.title + ' ✖' + '</p>';
+    			}
+    			dashboard.append(test);
+    		});
+      }
 
       dashboard.append('<div class="space"></div>');
 		});

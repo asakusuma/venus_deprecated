@@ -7,23 +7,41 @@
 
 var javascript = true;
 
-describe('first test', function() {
-  it('should work', function() {
-    '1'.should.eql('1');
-  });
-  it('should work again', function() {
-  	'2'.should.eql('2');
-  });
-  it('should not work', function() {
-  	'1'.should.eql('2');
-  });
-  it('this test should fail', function() {
-    '1'.should.eql('2');
-  });
-});
+describe('Array', function(){
+  describe('#push()', function(){
+    it('should append a value', function(){
+      var arr = [];
+      arr.push('foo');
+      arr.push('bar');
+      arr.push('baz');
+      console.log(arr[0]);
+      assert('foo' == arr[0]); // to test indentation
+      assert('bar' == arr[1]);
+      assert('baz' == arr[2]);
+    })
 
-describe('second test', function() {
-  it('definitely work', function() {
-    '3'.should.eql('3');
-  });
-});
+    it('should return the length', function(){
+      var arr = [];
+      assert(1 == arr.push('foo'));
+      assert(2 == arr.push('bar'));
+      assert(3 == arr.push('baz'));
+    })
+  })
+})
+
+describe('Array', function(){
+  describe('#pop()', function(){
+    it('should remove and return the last value', function(){
+      var arr = [1,2,3];
+      assert(arr.pop() == 3);
+      assert(arr.pop() == 2);
+      assert(arr.pop() == 1);
+    })
+
+    it('should adjust .length', function(){
+      var arr = [1,2,3];
+      arr.pop();
+      assert(arr.length == 2);
+    })
+  })
+})
