@@ -25,6 +25,20 @@
     <!--Running test: {testId}-->
   </div>
 
+  <script id="test-result-template" type="template">
+    Hello, test number {testNumber}
+  </script>
+
+  <script>
+    /*var templateMarkup = $('#test-result-template').html();*/
+    /*dust.loadSource( dust.compile( templateMarkup, 'test-result' );*/
+
+
+    /*dust.render('test-result', {}, function( err, html ) {*/
+      /*$('#dashboard').html(html);*/
+    /*});*/
+  </script>
+
   <script src="{testcaseFile}"></script>
   <script type="text/javascript">
     window.adaptor.start();
