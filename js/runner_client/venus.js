@@ -18,25 +18,43 @@
   	dashboard.append(stats);
 
   	dashboard.append('<div class="header2">breakdown</div>');
-  	$.each(results.suites, function(index, suite) {
-  		dashboard.append('<div class="test">' + suite.title + ' - ' + 
-  										 '<a class="link" href="' + suite.url + '">rerun</a>' + '</div>');
-      if(suite.test)
-      {
-    		$.each(suite.test, function(index, test) {
-    			var test;
+    var stack = [];
+    stack.push(results);
+    var traverse = stack.pop();
+    while(traverse)
+    {
+    	$.each(traverse.suites, function(index, suite) {
+        dashboard.append('<div class="test">' + suite.title + ' - ' + 
+                         '<a class="link" href="' + suite.url + '">rerun</a>' + '</div>');
+        stack.push(suite);
+        dashboard.append('<div class="space"></div>');
+  		});
 
-    			if(test.status == 'passed') {
-    				test = '<p>' + test.title + ' ' + '<span class="green">✔</span>' + '</p>';
-    			} else {
-    				test = '<p class="red">' + test.title + ' ✖' + '</p>';
-    			}
-    			dashboard.append(test);
-    		});
-      }
-
-      dashboard.append('<div class="space"></div>');
-		});
+      traverse = stack.pop();
+    }
 
   };
 }(window));
+
+
+/**
+
+// The code below prints out tests associated with suites,
+// and it can be plugged in once the suite traversal is done correctly.
+
+if(suite.test)
+{
+  $.each(suite.test, function(index, test) {
+    var test;
+
+    if(test.status == 'passed') {
+      test = '<p>' + test.title + ' ' + '<span class="green">✔</span>' + '</p>';
+    } else {
+      test = '<p class="red">' + test.title + ' ✖' + '</p>';
+    }
+    dashboard.append(test);
+  });
+}
+**/
+
+

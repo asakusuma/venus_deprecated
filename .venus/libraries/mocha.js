@@ -1622,30 +1622,33 @@ function HTML_JSON(runner) {
   var self = this
     , stats = this.stats
     , total = runner.total
-    , results = {};
+    , results = {}
+    , stack = [];
 
   results.suites = [];
-  var index = 0;
+  stack.push(results);
 
   runner.on('suite', function(suite){
     if (suite.root) return;
 
     var url = location.protocol + '//' + location.host + location.pathname + '?grep=^' + utils.escapeRegexp(suite.fullTitle());
-    
-    //console.log('url: ' + url);
-    //console.log('suite.title: ' + suite.title);
-    results.suites.push({
+    var current = stack[stack.length - 1];
+
+    var index = current.suites.push({
       'title' : suite.title,
       'url' : url
     });
-    results.suites[index].test = [];
+
+    var pushThis = current.suites[index-1];
+
+    if(!pushThis.hasOwnProperty('test')) { pushThis.test = []; }
+    if(!pushThis.hasOwnProperty('suites')) { pushThis.suites = []; }
+    stack.push(pushThis);
   });
 
   runner.on('suite end', function(suite){
     if (suite.root) return;
-    index = index + 1;
-
-    //console.log('suite end!');
+    stack.pop();
   });
 
   runner.on('fail', function(test, err){
@@ -1663,45 +1666,30 @@ function HTML_JSON(runner) {
   });
 
   runner.on('test end', function(test){
-    //console.log(test);
-
-    //console.log('   ' + 'percent: ' + percent);
-
-    //console.log('   ' + 'stats.passes: ' + stats.passes);
-    //console.log('   ' + 'stats.failures: ' + stats.failures);
 
     var ms = new Date - stats.start;
-    //console.log('   ' + 'milliseconds: ' + (ms / 1000).toFixed(2));
 
     results.failures = stats.failures;
     results.passes = stats.passes;
     results.milliseconds = (ms / 1000).toFixed(2);
 
-    // test
-    if ('passed' == test.state) {
-      //console.log('   ' + 'test.speed: ' + test.speed);
-      //console.log('   ' + 'test.title: ' + test.title);
-      //console.log('   ' + 'test.duration: ' + test.duration);
+    var current = stack[stack.length - 1];
 
-      results.suites[index].test.push({
+    if ('passed' == test.state) {
+      current.test.push({
         'status' : 'passed',
         'title' : test.title,
         'speed' : test.speed
       });
     } else if (test.pending) {
-      //console.log('   ' + 'test.title: ' + test.title);
-
-      results.suites[index].test.push({
+      current.test.push({
         'status' : 'pending',
         'title' : test.title
       });
     } else {
       var str = test.err.stack || test.err.toString();
 
-      //console.log('   ' + 'test.title ' + test.title);
-      //console.log('   ' + 'str' + str);
-
-      results.suites[index].test.push({
+      current.test.push({
         'status' : 'failed',
         'title' : test.title,
         'str' : str
