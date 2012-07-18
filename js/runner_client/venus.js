@@ -17,6 +17,8 @@
   							'</p>';
   	dashboard.append(stats);
 
+    traverse(results);
+
   	dashboard.append('<div class="header2">breakdown</div>');
     var stack = [];
     stack.push(results);
@@ -32,6 +34,16 @@
 
       traverse = stack.pop();
     }
+
+
+  function traverse(node) {
+    if(node.suites && node.suites.length > 0) {
+      node.suites.forEach(function(child) {
+        console.log(child.title);
+        traverse(child);
+      });
+    }
+  }
 
   };
 }(window));
