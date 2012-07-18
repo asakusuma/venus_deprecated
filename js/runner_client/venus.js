@@ -17,32 +17,34 @@
   							'</p>';
   	dashboard.append(stats);
 
-    traverse(results);
+    var lines = traverse(results, []);
+    window.lines = lines;
+    //dashboard.append('<div class="header2">breakdown</div>');
+    //var stack = [];
+    //stack.push(results);
+    //var traverse = stack.pop();
+    //while(traverse)
+    //{
+      //$.each(traverse.suites, function(index, suite) {
+        //dashboard.append('<div class="test">' + suite.title + ' - ' + 
+                         //'<a class="link" href="' + suite.url + '">rerun</a>' + '</div>');
+        //stack.push(suite);
+        //dashboard.append('<div class="space"></div>');
+      //});
 
-  	dashboard.append('<div class="header2">breakdown</div>');
-    var stack = [];
-    stack.push(results);
-    var traverse = stack.pop();
-    while(traverse)
-    {
-    	$.each(traverse.suites, function(index, suite) {
-        dashboard.append('<div class="test">' + suite.title + ' - ' + 
-                         '<a class="link" href="' + suite.url + '">rerun</a>' + '</div>');
-        stack.push(suite);
-        dashboard.append('<div class="space"></div>');
-  		});
+      //traverse = stack.pop();
+    //}
 
-      traverse = stack.pop();
-    }
-
-
-  function traverse(node) {
+  function traverse(node, lines) {
     if(node.suites && node.suites.length > 0) {
       node.suites.forEach(function(child) {
         console.log(child.title);
-        traverse(child);
+        lines.push(child.title);
+        traverse(child, lines);
       });
     }
+
+    return lines;
   }
 
   };
